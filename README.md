@@ -32,10 +32,10 @@ Through the seasearch builder, you can compile and package seasearch projects
 ```shell
 #clone and fetch seasearch
 git clone git@gitlab.seafile.top:seatable-dev/seasearch.git
-docker run --name seasearch-builder --rm -v {you_seasearch_code_dir}:/opt/seasearch -it seasearch-builder bash /opt/scripts/build.sh {version}
+docker run --name seasearch-builder --rm -v ./seasearch:/opt/seasearch -it seasearch-builder bash /opt/scripts/build.sh {version}
 ```
 
-The result binary file is {you_seasearch_code_dir}/seasearch-{version}.tar.gz
+The result binary file is seasearch/seasearch-{version}.tar.gz
 
 ## Build seasearch docker image
 Build seasearch docker image use the following commands
