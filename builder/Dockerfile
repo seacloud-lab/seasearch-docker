@@ -15,9 +15,9 @@ RUN apt-get install -y git
 RUN whereis cmake
 RUN apt-get remove -y cmake
 RUN mkdir -p /opt/cmake
-COPY lib/cmake-3.29.3-linux-x86_64.sh /opt/cmake/cmake-3.29.3-linux-x86_64.sh
+COPY lib/cmake-3.31.4-linux-x86_64.sh /opt/cmake/cmake-3.31.4-linux-x86_64.sh
 WORKDIR /opt/cmake
-RUN bash cmake-3.29.3-linux-x86_64.sh --skip-license
+RUN bash cmake-3.31.4-linux-x86_64.sh --skip-license
 RUN ln -s /opt/cmake/bin/cmake /usr/local/bin/cmake
 RUN cmake --version
 
@@ -62,9 +62,9 @@ RUN ln -s /opt/faiss/build/c_api/libfaiss_c.so /usr/lib/libfaiss_c.so
 
 #set golang proxy
 RUN mkdir -p /opt/go
-COPY lib/go1.22.3.linux-amd64.tar.gz /opt/go/go1.22.3.linux-amd64.tar.gz
+COPY lib/go1.23.5.linux-amd64.tar.gz /opt/go/go1.23.5.linux-amd64.tar.gz
 WORKDIR /opt/go
-RUN tar -zxvf go1.22.3.linux-amd64.tar.gz
+RUN tar -zxvf go1.23.5.linux-amd64.tar.gz
 RUN ln -s /opt/go/go/bin/go /usr/local/bin/go
 RUN go env -w GOPROXY=https://goproxy.cn
 
