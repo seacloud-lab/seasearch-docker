@@ -11,6 +11,10 @@ Before building the image, you have to fetch faiss, by running with the followin
 cd builder #builder-NoMKL if the MKL is not supported by the cpu
 #clone or fetch codes of faiss
 git clone https://github.com/facebookresearch/faiss.git
+
+# for nomkl, you have to run the following commands
+git clone https://github.com/gflags/gflags.git
+bash thirdparites.sh
 ```
 
 In this step, please make sure you can fetch the codes from the repositories, the **github.com/faiss** and **gitlab.seafile.top/seasearch**.
@@ -44,7 +48,7 @@ Build seasearch docker image use the following commands
 mv {you_seasearch_code_dir}/seasearch-{version}.tar.gz seasearch/seasearch-{version}.tar.gz
 cd seasearch #seasearch-NoMKL if the MKL is not supported by your cpu
 tar -zxvf seasearch-{version}.tar.gz
-docker build -t seasearch:{version} .
+docker build -t seasearch .
 ```
 
 ## Start seasearch server
@@ -52,10 +56,10 @@ docker build -t seasearch:{version} .
 You have to specify the port used by seasearch in running seasearch docker image, and **4080** is default. At the same time, We highly recommend that map **/opt/seasearch/data** to the host (i.e., **host_dir**) to achieve data persistence. For example:
 
 ```shell
-docker run --name seasearch --rm \  
-  -v /path/to/host/data:/opt/seasearch/data \  
-  -p 4080:4080 \  
-  -e SS_FIRST_ADMIN_USER=admin \  
+docker run --name seasearch --rm \
+  -v /path/to/host/data:/opt/seasearch/data \
+  -p 4080:4080 \
+  -e SS_FIRST_ADMIN_USER=admin \
   -e SS_FIRST_ADMIN_PASSWORD=password \
-  seasearch:{version}
+  seasearch
 ```
