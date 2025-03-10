@@ -8,7 +8,7 @@ deb http://cdn-fastly.deb.debian.org/debian-security stable-security main \
 deb http://cdn-fastly.deb.debian.org/debian-security-debug stable-security-debug main" > /etc/apt/sources.list
 
 RUN apt-get update --fix-missing
-RUN apt-get install -y libgomp1
+RUN apt-get install -y libgomp1 ca-certificates
 
 RUN mkdir -p /opt/scripts
 COPY opt /opt

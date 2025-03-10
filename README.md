@@ -55,7 +55,7 @@ You have to specify the port used by seasearch in running seasearch docker image
 docker run --name seasearch --rm \  
   -v /path/to/host/data:/opt/seasearch/data \  
   -p 4080:4080 \  
-  -e ZINC_FIRST_ADMIN_USER=admin \  
-  -e ZINC_FIRST_ADMIN_PASSWORD=password \
+  -e SS_FIRST_ADMIN_USER=admin \  
+  -e SS_FIRST_ADMIN_PASSWORD=password \
   seasearch:{version}
 ```
