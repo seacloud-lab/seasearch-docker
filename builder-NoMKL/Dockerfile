@@ -23,11 +23,6 @@ RUN node --version
 RUN npm --version
 RUN npm config set registry https://registry.npmmirror.com 
 
-# build faiss
-RUN wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
-    | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
-RUN echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | tee /etc/apt/sources.list.d/oneAPI.list
-
 #copy
 RUN mkdir -p /opt/faiss /opt/seasearch /opt/scripts
 COPY faiss /opt/faiss
