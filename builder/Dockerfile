@@ -45,9 +45,19 @@ RUN echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https:/
 #copy
 RUN mkdir -p /opt/faiss /opt/seasearch /opt/scripts
 COPY faiss /opt/faiss
+COPY gflags /opt/gflags
 COPY build.sh /opt/scripts/build.sh
 
 #compile
+## gflags
+WORKDIR /opt/gflags
+RUN mkdir build
+RUN cd build/
+RUN cmake -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON -DINSTALL_HEADERS=ON -DINSTALL_SHARED_LIBS=ON -DINSTALL_STATIC_LIBS=ON ..
+RUN make -j2
+RUN make install
+
+## faiss
 WORKDIR /opt/faiss
 RUN cmake -B build -DFAISS_ENABLE_GPU=OFF \
     -DFAISS_ENABLE_C_API=ON \
