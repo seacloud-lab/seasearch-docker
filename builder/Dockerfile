@@ -52,7 +52,7 @@ COPY build.sh /opt/scripts/build.sh
 ## gflags
 WORKDIR /opt/gflags
 RUN mkdir build
-RUN cd build/
+WORKDIR /opt/gflags/build
 RUN cmake -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON -DINSTALL_HEADERS=ON -DINSTALL_SHARED_LIBS=ON -DINSTALL_STATIC_LIBS=ON ..
 RUN make -j2
 RUN make install
