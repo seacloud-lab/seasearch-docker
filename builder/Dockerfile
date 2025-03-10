@@ -23,7 +23,7 @@ RUN cmake --version
 
 #node.
 RUN apt-get install -y ca-certificates gnupg curl apt-transport-https
-RUN apt-get install -y libpython3-stdlib libpython3.11-minimal libpython3.11-stdlib media-types
+RUN apt-get install -y libpython3-stdlib libpython3.12-minimal libpython3.12-stdlib media-types
 RUN mkdir -p /opt/node
 COPY lib/node-v20.13.1-linux-x64.tar.xz /opt/node/node-v20.13.1-linux-x64.tar.xz
 WORKDIR /opt/node

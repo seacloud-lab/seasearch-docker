@@ -13,7 +13,7 @@ RUN apt-get install -y libatlas-base-dev libatlas3-base
 
 #node.
 RUN apt-get install -y ca-certificates gnupg curl apt-transport-https
-RUN apt-get install -y libpython3-stdlib libpython3.11-minimal libpython3.11-stdlib media-types
+RUN apt-get install -y libpython3-stdlib libpython3.12-minimal libpython3.12-stdlib media-types
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get install -y nodejs
