@@ -1,4 +1,4 @@
-FROM lantrea/ubuntu:24.04
+FROM antrea/ubuntu:24.04
 ARG VERSION
 ARG COMMIT_HASH
 ARG BUILD_DATE
