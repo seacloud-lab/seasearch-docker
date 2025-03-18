@@ -1,14 +1,10 @@
-FROM linuxcontainers/debian-slim:12
+FROM antrea/ubuntu:24.04
 ARG VERSION
 ARG COMMIT_HASH
 ARG BUILD_DATE
 
-RUN echo "deb http://cdn-fastly.deb.debian.org/debian stable main \
-deb http://cdn-fastly.deb.debian.org/debian-security stable-security main \
-deb http://cdn-fastly.deb.debian.org/debian-security-debug stable-security-debug main" > /etc/apt/sources.list
-
 RUN apt-get update --fix-missing
-RUN apt-get install -y libgomp1
+RUN apt-get install -y libgomp1 ca-certificates
 RUN apt-get install -y libatlas-base-dev libatlas3-base
 
 RUN mkdir -p /opt/scripts

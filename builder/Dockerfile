@@ -23,7 +23,7 @@ RUN cmake --version
 
 #node.
 RUN apt-get install -y ca-certificates gnupg curl apt-transport-https
-RUN apt-get install -y libpython3-stdlib libpython3.11-minimal libpython3.11-stdlib media-types
+RUN apt-get install -y libpython3-stdlib libpython3.12-minimal libpython3.12-stdlib media-types
 RUN mkdir -p /opt/node
 COPY lib/node-v20.13.1-linux-x64.tar.xz /opt/node/node-v20.13.1-linux-x64.tar.xz
 WORKDIR /opt/node
@@ -45,9 +45,19 @@ RUN echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https:/
 #copy
 RUN mkdir -p /opt/faiss /opt/seasearch /opt/scripts
 COPY faiss /opt/faiss
+COPY gflags /opt/gflags
 COPY build.sh /opt/scripts/build.sh
 
 #compile
+## gflags
+WORKDIR /opt/gflags
+RUN mkdir build
+WORKDIR /opt/gflags/build
+RUN cmake -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=ON -DINSTALL_HEADERS=ON -DINSTALL_SHARED_LIBS=ON -DINSTALL_STATIC_LIBS=ON ..
+RUN make -j2
+RUN make install
+
+## faiss
 WORKDIR /opt/faiss
 RUN cmake -B build -DFAISS_ENABLE_GPU=OFF \
     -DFAISS_ENABLE_C_API=ON \
