@@ -13,7 +13,7 @@ main() {
     go mod tidy  
     go build -o seasearch ./cmd/zincsearch/  
     
-    tar -czvf seasearch-$version.tar.gz /opt/faiss/build /opt/seasearch/seasearch  
+    tar -czvf seasearch-$version.tar.gz /opt/faiss/build /opt/seasearch/seasearch /opt/seasearch/assets
       
     echo "seasearch-$version.tar.gz 打包完成."  
 }  
