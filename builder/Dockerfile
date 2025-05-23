@@ -1,5 +1,5 @@
 # build Seasearch
-FROM intel/oneapi-basekit:2025.0.2-0-devel-ubuntu24.04
+FROM intel/oneapi-basekit:2025.1.3-0-devel-ubuntu24.04
 ARG VERSION
 ARG COMMIT_HASH
 ARG BUILD_DATE
@@ -15,9 +15,9 @@ RUN apt-get install -y git
 RUN whereis cmake
 RUN apt-get remove -y cmake
 RUN mkdir -p /opt/cmake
-COPY lib/cmake-3.31.4-linux-x86_64.sh /opt/cmake/cmake-3.31.4-linux-x86_64.sh
+COPY lib/cmake-4.0.2-linux-x86_64.sh /opt/cmake/cmake-4.0.2-linux-x86_64.sh
 WORKDIR /opt/cmake
-RUN bash cmake-3.31.4-linux-x86_64.sh --skip-license
+RUN bash cmake-4.0.2-linux-x86_64.sh --skip-license
 RUN ln -s /opt/cmake/bin/cmake /usr/local/bin/cmake
 RUN cmake --version
 
@@ -25,11 +25,11 @@ RUN cmake --version
 RUN apt-get install -y ca-certificates gnupg curl apt-transport-https
 RUN apt-get install -y libpython3-stdlib libpython3.12-minimal libpython3.12-stdlib media-types
 RUN mkdir -p /opt/node
-COPY lib/node-v20.13.1-linux-x64.tar.xz /opt/node/node-v20.13.1-linux-x64.tar.xz
+COPY lib/node-v22.16.0-linux-x64.tar.xz /opt/node/node-v22.16.0-linux-x64.tar.xz
 WORKDIR /opt/node
-RUN tar -xJvf node-v20.13.1-linux-x64.tar.xz
-RUN ln -s /opt/node/node-v20.13.1-linux-x64/bin/node /usr/local/bin/node
-RUN ln -s /opt/node/node-v20.13.1-linux-x64/bin/npm /usr/local/bin/npm
+RUN tar -xJvf node-v22.16.0-linux-x64.tar.xz
+RUN ln -s /opt/node/node-v22.16.0-linux-x64/bin/node /usr/local/bin/node
+RUN ln -s /opt/node/node-v22.16.0-linux-x64/bin/npm /usr/local/bin/npm
 
 
 #test node and npm
@@ -72,9 +72,9 @@ RUN ln -s /opt/faiss/build/c_api/libfaiss_c.so /usr/lib/libfaiss_c.so
 
 #set golang proxy
 RUN mkdir -p /opt/go
-COPY lib/go1.23.5.linux-amd64.tar.gz /opt/go/go1.23.5.linux-amd64.tar.gz
+COPY lib/go1.24.3.linux-amd64.tar.gz /opt/go/go1.24.3.linux-amd64.tar.gz
 WORKDIR /opt/go
-RUN tar -zxvf go1.23.5.linux-amd64.tar.gz
+RUN tar -zxvf go1.24.3.linux-amd64.tar.gz
 RUN ln -s /opt/go/go/bin/go /usr/local/bin/go
 RUN go env -w GOPROXY=https://goproxy.cn
 
