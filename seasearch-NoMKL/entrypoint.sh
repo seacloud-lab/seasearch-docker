@@ -8,6 +8,10 @@ function set_env(){
   export ZINC_ETCD_ENDPOINTS=$SS_ETCD_ENDPOINTS
   export ZINC_ETCD_PREFIX=$SS_ETCD_PREFIX
 
+  export ZINC_PLUGIN_GSE_ENABLE=true
+  export ZINC_PLUGIN_GSE_DICT_EMBED=small
+  export ZINC_PLUGIN_GSE_DICT_PATH=/opt/seasearch/gse_plugin
+
   if [ "$USE_S3_STORAGE" = "true" ]; then
       local seafile_storage_type=s3
   else
