@@ -8,17 +8,12 @@ function set_env(){
   export ZINC_ETCD_ENDPOINTS=$SS_ETCD_ENDPOINTS
   export ZINC_ETCD_PREFIX=$SS_ETCD_PREFIX
 
+  # for word differents
   export ZINC_PLUGIN_GSE_ENABLE=true
   export ZINC_PLUGIN_GSE_DICT_EMBED=small
   export ZINC_PLUGIN_GSE_DICT_PATH=/opt/seasearch/assets
 
-  if [ "$USE_S3_STORAGE" = "true" ]; then
-      local seafile_storage_type=s3
-  else
-      local seafile_storage_type=disk
-  fi
-
-  export SS_STORAGE_TYPE=${SS_STORAGE_TYPE:-$seafile_storage_type}
+  # for the configurations map in s3
   export SS_S3_BUCKET=${SS_S3_BUCKET:-${S3_SS_BUCKET:-}}
   export SS_S3_ACCESS_ID=${SS_S3_ACCESS_ID:-${S3_KEY_ID:-}}
   export SS_S3_USE_V4_SIGNATURE=${SS_S3_USE_V4_SIGNATURE:-${S3_USE_V4_SIGNATURE:-true}}
