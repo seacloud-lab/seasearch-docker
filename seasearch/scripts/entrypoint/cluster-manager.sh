@@ -2,8 +2,10 @@
 
 #start server
 cd /opt
-chmod +x /opt/seasearch-proxy
-./seasearch-proxy
+chmod +x /opt/cluster/cluster-manager
+./cluster-manager &
+chmod +x /opt/cluster/seasearch-proxy
+./seasearch-proxy &
 
 echo "This is a idle script (infinite loop) to keep container running."
 
