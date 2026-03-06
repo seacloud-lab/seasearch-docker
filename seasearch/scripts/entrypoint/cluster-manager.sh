@@ -1,6 +1,15 @@
 #!/bin/bash
 
+function set_env(){
+  export SS_CLUSTER_MANAGER_HOST=127.0.0.1
+  export SS_CLUSTER_MANAGER_PORT=4081
+  export SS_CLUSTER_MANAGER_URL=http://127.0.0.1:4081/
+  export SS_CLUSTER_PROXY_HOST=0.0.0.0
+  export SS_CLUSTER_PROXY_PORT=4082
+}
+
 #start server
+set_env
 cd /opt
 chmod +x /opt/cluster/cluster-manager
 ./cluster-manager &
