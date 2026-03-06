@@ -15,10 +15,11 @@ main() {
     go build -o seasearch-proxy ./cmd/zinc-proxy/main.go
     go build -o cluster-manager ./cmd/cluster-manager/main.go
 
-    mv seasearch-proxy /opt/seasearch-proxy
-    mv cluster-manager /opt/cluster-manager
+    mkdir /opt/cluster
+    mv seasearch-proxy /opt/cluster/seasearch-proxy
+    mv cluster-manager /opt/cluster/cluster-manager
     
-    tar -czvf seasearch-$version.tar.gz /opt/faiss/build /opt/seasearch/seasearch /opt/seasearch/assets /opt/seasearch-cluster/seasearch-proxy /opt/seasearch-cluster/cluster-manager
+    tar -czvf seasearch-$version.tar.gz /opt/faiss/build /opt/seasearch/seasearch /opt/seasearch/assets /opt/cluster/seasearch-proxy /opt/cluster/cluster-manager
       
     echo "seasearch-$version.tar.gz 打包完成."  
 }  
