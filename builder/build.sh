@@ -12,7 +12,7 @@ main() {
     export CGO_ENABLED=1
     go mod tidy
     go build -o seasearch ./cmd/zincsearch/
-    go build -o seasearch-proxy ./cmd/zinc-proxy/main.go
+    go build -o seasearch-proxy ./cmd/zinc-proxy
     go build -o cluster-manager ./cmd/cluster-manager/main.go
 
     mkdir /opt/cluster
