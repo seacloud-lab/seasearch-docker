@@ -3,14 +3,9 @@
 function set_env(){
   export ZINC_FIRST_ADMIN_USER=$SS_FIRST_ADMIN_USER
   export ZINC_FIRST_ADMIN_PASSWORD=$SS_FIRST_ADMIN_PASSWORD
-  export ZINC_ETCD_USERNAME=$SS_ETCD_USERNAME
-  export ZINC_ETCD_PASSWORD=$SS_ETCD_PASSWORD
-  export ZINC_ETCD_ENDPOINTS=$SS_ETCD_ENDPOINTS
-  export ZINC_ETCD_PREFIX=$SS_ETCD_PREFIX
 
   # for word differents
   export ZINC_PLUGIN_GSE_ENABLE=true
-  export ZINC_PLUGIN_GSE_DICT_EMBED=small
   export ZINC_PLUGIN_GSE_DICT_PATH=/opt/seasearch/assets
 
   # for the configurations map in s3
