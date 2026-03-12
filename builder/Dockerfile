@@ -1,5 +1,5 @@
 # build Seasearch
-FROM intel/oneapi-basekit:2025.1.3-0-devel-ubuntu24.04
+FROM intel/oneapi-basekit:2025.3.1-0-devel-ubuntu24.04
 ARG VERSION
 ARG COMMIT_HASH
 ARG BUILD_DATE
