@@ -13,7 +13,7 @@ main() {
     go mod tidy
     go build -o seasearch ./cmd/zincsearch/
     go build -o seasearch-proxy ./cmd/zinc-proxy
-    go build -o cluster-manager ./cmd/cluster-manager/main.go
+    go build -o cluster-manager ./cmd/cluster-manager
 
     mkdir /opt/cluster
     mv seasearch-proxy /opt/cluster/seasearch-proxy
