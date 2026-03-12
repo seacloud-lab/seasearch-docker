@@ -8,7 +8,7 @@ RUN apt-get install -y ca-certificates
 
 RUN mkdir -p /opt/scripts
 COPY opt/cluster /opt/cluster
-COPY entrypoint/gateway.sh /opt/scripts/entrypoint.sh
+COPY scripts/entrypoint/gateway.sh /opt/scripts/entrypoint.sh
 COPY scripts/register-cluster.sh /opt/scripts/register-cluster.sh
 RUN chmod +x /opt/scripts/entrypoint.sh
 RUN chmod +x /opt/scripts/register-cluster.sh
