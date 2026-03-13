@@ -7,10 +7,13 @@ RUN apt-get update --fix-missing
 RUN apt-get install -y ca-certificates
 
 RUN mkdir -p /opt/scripts
+COPY opt/faiss /opt/faiss
 COPY opt/cluster /opt/cluster
 COPY scripts/entrypoint/gateway.sh /opt/scripts/entrypoint.sh
 COPY scripts/register-cluster.sh /opt/scripts/register-cluster.sh
 RUN chmod +x /opt/scripts/entrypoint.sh
 RUN chmod +x /opt/scripts/register-cluster.sh
+RUN ln -s /opt/faiss/build/c_api/libfaiss_c.so /usr/lib/libfaiss_c.so
+RUN ln -s /opt/faiss/build/faiss/libfaiss.so /usr/lib/libfaiss.so
 RUN ln -s /opt/scripts/register-cluster.sh /usr/local/bin/register-cluster
 CMD ["bash", "-c", "/opt/scripts/entrypoint.sh"]
