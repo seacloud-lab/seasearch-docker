@@ -20,7 +20,7 @@ function set_manager_env(){
 
 cd /opt/cluster
 
-case "${GATEWAY_NODE_TYPE}" in
+case "${SS_GATEWAY_NODE_TYPE}" in
   "proxy")
     echo "Starting in PROXY mode"
     set_proxy_env

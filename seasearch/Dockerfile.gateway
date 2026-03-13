@@ -4,7 +4,7 @@ ARG COMMIT_HASH
 ARG BUILD_DATE
 
 RUN apt-get update --fix-missing
-RUN apt-get install -y libgomp1 ca-certificates
+RUN apt-get install -y curl libgomp1 ca-certificates
 
 RUN mkdir -p /opt/scripts
 COPY opt/faiss /opt/faiss

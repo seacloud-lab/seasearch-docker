@@ -7,6 +7,30 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
+echo "Checking if service is available..."
+SERVICE_URL="http://localhost:4081"
+MAX_RETRIES=30
+RETRY_COUNT=0
+
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+    HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$SERVICE_URL" 2>/dev/null || echo "000")
+    
+    if [ "$HTTP_CODE" != "000" ] && [ "$HTTP_CODE" -lt 500 ]; then
+        echo "Service is available (HTTP $HTTP_CODE)"
+        break
+    fi
+    
+    RETRY_COUNT=$((RETRY_COUNT + 1))
+    
+    if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+        echo "Error: Service did not start within 30 seconds"
+        exit 1
+    fi
+    
+    echo "Service not available yet, retrying in 1 second... ($RETRY_COUNT/$MAX_RETRIES)"
+    sleep 1
+done
+
 nodes=()
 IFS=',' read -ra args <<< "$1"
 
