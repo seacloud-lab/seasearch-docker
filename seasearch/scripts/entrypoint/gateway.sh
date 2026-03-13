@@ -18,11 +18,12 @@ function set_manager_env(){
   export SS_CLUSTER_MANAGER_PORT=4081
 }
 
+cd /opt/cluster
+
 case "${GATEWAY_NODE_TYPE}" in
   "proxy")
     echo "Starting in PROXY mode"
     set_proxy_env
-    cd /opt/cluster
     chmod +x seasearch-proxy
     ./seasearch-proxy &
     ;;
@@ -30,7 +31,6 @@ case "${GATEWAY_NODE_TYPE}" in
   "manager")
     echo "Starting in MANAGER mode"
     set_manager_env
-    cd /opt/cluster
     chmod +x cluster-manager
     ./cluster-manager &
     ;;
@@ -38,7 +38,6 @@ case "${GATEWAY_NODE_TYPE}" in
   *)
     echo "Starting in NORMAL mode"
     set_env
-    cd /opt/cluster
     chmod +x cluster-manager
     ./cluster-manager &
     chmod +x seasearch-proxy
