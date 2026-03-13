@@ -18,8 +18,6 @@ function set_manager_env(){
   export SS_CLUSTER_MANAGER_PORT=4081
 }
 
-cd /opt
-
 case "${GATEWAY_NODE_TYPE}" in
   "proxy")
     echo "Starting in PROXY mode"
