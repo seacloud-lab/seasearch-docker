@@ -3,12 +3,15 @@
 if [ $# -eq 0 ]; then
     echo "Error: incorrect parameters"
     echo "Example:"
-    echo "$0 1:192.168.0.1:1000 2:192.168.0.2:1000 ..."
+    echo "$0 1:192.168.0.1:1000,2:192.168.0.2:1000,..."
     exit 1
 fi
 
 nodes=()
-for arg in "$@"; do
+IFS=',' read -ra args <<< "$1"
+
+for arg in "${args[@]}"; do
+    arg=$(echo "$arg" | tr -d ' ')
     if [[ $arg =~ ^([0-9]+):([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+):([0-9]+)$ ]]; then
         node_id="${BASH_REMATCH[1]}"
         address="${BASH_REMATCH[2]}:${BASH_REMATCH[3]}"

@@ -25,23 +25,26 @@ case "${GATEWAY_NODE_TYPE}" in
     echo "Starting in PROXY mode"
     set_proxy_env
     chmod +x seasearch-proxy
-    ./seasearch-proxy &
+    ./seasearch-proxy
     ;;
     
   "manager")
     echo "Starting in MANAGER mode"
     set_manager_env
     chmod +x cluster-manager
+    chmod +x /opt/scripts/register-cluster.sh
     ./cluster-manager &
+    . /opt/scripts/register-cluster.sh ${SS_SERVER_CLUSTER_ENPOINTS}
     ;;
     
   *)
     echo "Starting in NORMAL mode"
     set_env
     chmod +x cluster-manager
-    ./cluster-manager &
+    chmod +x /opt/scripts/register-cluster.sh
     chmod +x seasearch-proxy
-    ./seasearch-proxy &
+    ./cluster-manager &
+    . /opt/scripts/register-cluster.sh ${SS_SERVER_CLUSTER_ENPOINTS} && ./seasearch-proxy &
     ;;
 esac
 
