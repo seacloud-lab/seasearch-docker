@@ -45,7 +45,7 @@ case "${SS_GATEWAY_NODE_TYPE}" in
     chmod +x seasearch-proxy
     ./cluster-manager &
     if [ -n "${SS_SERVER_CLUSTER_ENPOINTS}" ]; then
-        /opt/scripts/register-cluster.sh ${SS_SERVER_CLUSTER_ENPOINTS} && ./seasearch-proxy &
+        /opt/scripts/register-cluster.sh ${SS_SERVER_CLUSTER_ENPOINTS}
     fi
     ;;
 esac
