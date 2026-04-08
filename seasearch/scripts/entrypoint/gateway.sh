@@ -27,23 +27,20 @@ case "${SS_GATEWAY_NODE_TYPE}" in
     chmod +x seasearch-proxy
     ./seasearch-proxy
     ;;
-
-  "manager")
-    echo "Starting in MANAGER mode"
-    set_manager_env
-    chmod +x cluster-manager
-    ./cluster-manager &
-    if [ -n "${SS_SERVER_CLUSTER_ENPOINTS}" ]; then
-        /opt/scripts/register-cluster.sh ${SS_SERVER_CLUSTER_ENPOINTS}
-    fi
-    ;;
-
+    
   *)
-    echo "Starting in NORMAL mode"
-    set_env
+    if [ "${SS_GATEWAY_NODE_TYPE}" == "manager" ]; then
+        echo "Starting in MANAGER mode"
+        set_manager_env
+    else
+        echo "Starting in NORMAL mode"
+        set_env
+        chmod +x seasearch-proxy
+    fi
+
     chmod +x cluster-manager
-    chmod +x seasearch-proxy
     ./cluster-manager &
+
     if [ -n "${SS_SERVER_CLUSTER_ENPOINTS}" ]; then
         /opt/scripts/register-cluster.sh ${SS_SERVER_CLUSTER_ENPOINTS}
     fi
