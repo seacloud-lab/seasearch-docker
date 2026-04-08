@@ -1,5 +1,30 @@
 #!/bin/bash
 
+# Check if cluster-manager is running (manager or normal mode only)
+echo "Checking if cluster-manager is available..."
+SERVICE_URL="http://localhost:4081"
+MAX_RETRIES=30
+RETRY_COUNT=0
+
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+    HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "${SERVICE_URL}/" 2>/dev/null)
+    if [ "$HTTP_CODE" != "000" ] && [ "$HTTP_CODE" -lt 500 ]; then
+        echo "cluster-manager is available (HTTP $HTTP_CODE)"
+        break
+    fi
+
+    RETRY_COUNT=$((RETRY_COUNT + 1))
+
+    if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+        echo "Error: cluster-manager is not running on localhost:4081"
+        echo "This command can only be used in manager or normal mode."
+        exit 1
+    fi
+
+    echo "Waiting for cluster-manager to start... ($RETRY_COUNT/$MAX_RETRIES)"
+    sleep 1
+done
+
 # Parameters check
 if [ $# -eq 0 ]; then
     echo "Error: incorrect parameters"
@@ -9,7 +34,6 @@ if [ $# -eq 0 ]; then
 fi
 
 echo "Checking if service is available..."
-SERVICE_URL="http://localhost:4081"
 MAX_RETRIES=30
 RETRY_COUNT=0
 
@@ -46,6 +70,16 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
     
     if [ "$HTTP_CODE" != "000" ] && [ "$HTTP_CODE" -lt 400 ]; then
         echo "Cluster register successfully (HTTP $HTTP_CODE)"
+        
+        # Restart seasearch-proxy if it's running (for normal mode)
+        if pgrep -f "seasearch-proxy" > /dev/null 2>&1; then
+            echo "Restarting seasearch-proxy to apply new cluster config..."
+            pkill -f "seasearch-proxy"
+            sleep 1
+            cd /opt/cluster && ./seasearch-proxy &
+            echo "seasearch-proxy restarted successfully."
+        fi
+        
         exit 0
     fi
     
