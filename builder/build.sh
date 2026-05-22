@@ -3,11 +3,6 @@
 main() {  
     local version=$1
 
-    cd /opt/seasearch/web || exit 1
-
-    npm install  
-    npm run build
-
     cd /opt/seasearch || exit 1
     export CGO_ENABLED=1
     go mod tidy
