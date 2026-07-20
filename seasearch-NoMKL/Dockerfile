@@ -8,7 +8,7 @@ RUN apt-get install -y libgomp1 ca-certificates wget
 RUN apt-get install -y libatlas-base-dev libatlas3-base
 
 RUN wget https://github.com/unum-cloud/USearch/releases/download/v2.26.0/usearch_linux_amd64_2.26.0.deb
-RUN apt install usearch_linux_amd64_2.26.0.deb
+RUN apt install -y ./usearch_linux_amd64_2.26.0.deb
 RUN rm usearch_linux_amd64_2.26.0.deb
 
 RUN mkdir -p /opt/scripts
