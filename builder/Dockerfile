@@ -49,8 +49,10 @@ COPY gflags /opt/gflags
 COPY build.sh /opt/scripts/build.sh
 
 # usearch
-COPY usearch_linux_amd64_2.26.0.deb /tmp/usearch_linux_amd64_2.26.0.deb
-RUN apt install /tmp/usearch_linux_amd64_2.26.0.deb
+WORKDIR /tmp
+RUN wget https://github.com/unum-cloud/USearch/releases/download/v2.26.0/usearch_linux_amd64_2.26.0.deb
+RUN apt install usearch_linux_amd64_2.26.0.deb
+RUN rm usearch_linux_arm64_2.26.0.deb
 
 # compile
 ## gflags
