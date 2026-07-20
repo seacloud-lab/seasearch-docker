@@ -48,7 +48,11 @@ COPY faiss /opt/faiss
 COPY gflags /opt/gflags
 COPY build.sh /opt/scripts/build.sh
 
-#compile
+# usearch
+COPY usearch_linux_amd64_2.26.0.deb /tmp/usearch_linux_amd64_2.26.0.deb
+RUN apt install /tmp/usearch_linux_amd64_2.26.0.deb
+
+# compile
 ## gflags
 WORKDIR /opt/gflags
 RUN mkdir build

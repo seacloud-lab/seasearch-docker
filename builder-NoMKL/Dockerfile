@@ -28,6 +28,10 @@ RUN mkdir -p /opt/faiss /opt/seasearch /opt/scripts
 COPY faiss /opt/faiss
 COPY build.sh /opt/scripts/build.sh
 
+# usearch
+COPY usearch_linux_amd64_2.26.0.deb /tmp/usearch_linux_amd64_2.26.0.deb
+RUN apt install /tmp/usearch_linux_amd64_2.26.0.deb
+
 #compile
 WORKDIR /opt/faiss
 RUN cmake -B build -DFAISS_ENABLE_GPU=OFF \
