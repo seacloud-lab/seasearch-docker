@@ -3,6 +3,8 @@ FROM golang:1.26-bookworm
 ARG VERSION
 ARG COMMIT_HASH
 ARG BUILD_DATE
+ENV NODE_VERSION=26.8.2 \
+    USEARCH_VERSION=2.26.2
 
 #develop env.
 RUN apt-get update
@@ -15,7 +17,7 @@ RUN apt-get install -y libatlas-base-dev libatlas3-base
 RUN apt-get install -y ca-certificates gnupg curl apt-transport-https
 RUN apt-get install -y libpython3-stdlib libpython3.11-minimal libpython3.11-stdlib media-types
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-RUN curl -sL https://deb.nodesource.com/setup_26.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_$(echo "$NODE_VERSION" | cut -d. -f1).x | bash -
 RUN apt-get install -y nodejs
 
 #test node and npm
@@ -30,9 +32,9 @@ COPY build.sh /opt/scripts/build.sh
 
 # usearch
 WORKDIR /tmp
-RUN wget https://github.com/unum-cloud/USearch/releases/download/v2.26.0/usearch_linux_arm64_2.26.0.deb
-RUN apt install -y ./usearch_linux_arm64_2.26.0.deb
-RUN rm usearch_linux_arm64_2.26.0.deb
+RUN wget https://github.com/unum-cloud/USearch/releases/download/v${USEARCH_VERSION}/usearch_linux_arm64_${USEARCH_VERSION}.deb
+RUN apt install -y ./usearch_linux_arm64_${USEARCH_VERSION}.deb
+RUN rm usearch_linux_arm64_${USEARCH_VERSION}.deb
 
 #compile
 WORKDIR /opt/faiss
