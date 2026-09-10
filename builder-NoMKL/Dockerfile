@@ -1,5 +1,5 @@
 # build Seasearch
-FROM golang:1.26-bookworm
+FROM golang:1.27-bookworm
 ARG VERSION
 ARG COMMIT_HASH
 ARG BUILD_DATE

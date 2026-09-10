@@ -3,7 +3,7 @@ set -e
 
 export CMAKE_VERSION=4.4.3
 export NODE_VERSION=26.8.2
-export GO_VERSION=1.26.8
+export GO_VERSION=1.27.1
 
 mkdir -p lib
 cd lib
