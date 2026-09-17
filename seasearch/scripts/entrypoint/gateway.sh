@@ -25,9 +25,9 @@ case "${SS_GATEWAY_NODE_TYPE}" in
     echo "Starting in PROXY mode"
     set_proxy_env
     chmod +x seasearch-proxy
-    ./seasearch-proxy
+    exec ./seasearch-proxy
     ;;
-    
+
   *)
     if [ "${SS_GATEWAY_NODE_TYPE}" == "manager" ]; then
         echo "Starting in MANAGER mode"
@@ -40,23 +40,36 @@ case "${SS_GATEWAY_NODE_TYPE}" in
 
     chmod +x cluster-manager
     ./cluster-manager &
+    manager_pid=$!
+
+    cleanup() {
+        [ -z "${manager_pid}" ] || kill -s SIGTERM "${manager_pid}" 2>/dev/null || true
+        [ -z "${proxy_pid}" ] || kill -s SIGTERM "${proxy_pid}" 2>/dev/null || true
+        [ -z "${manager_pid}" ] || wait "${manager_pid}" 2>/dev/null || true
+        [ -z "${proxy_pid}" ] || wait "${proxy_pid}" 2>/dev/null || true
+    }
+
+    trap 'cleanup; exit 0' SIGINT SIGTERM
 
     if [ -n "${SS_SERVER_CLUSTER_ENPOINTS}" ]; then
-        /opt/scripts/register-cluster.sh ${SS_SERVER_CLUSTER_ENPOINTS}
+        SS_SKIP_PROXY_RESTART=true /opt/scripts/register-cluster.sh "${SS_SERVER_CLUSTER_ENPOINTS}" || {
+            exit_code=$?
+            cleanup
+            exit "${exit_code}"
+        }
     fi
+
+    if [ "${SS_GATEWAY_NODE_TYPE}" == "manager" ]; then
+        wait "${manager_pid}"
+        exit $?
+    fi
+
+    ./seasearch-proxy &
+    proxy_pid=$!
+
+    wait -n "${manager_pid}" "${proxy_pid}"
+    exit_code=$?
+    cleanup
+    exit "${exit_code}"
     ;;
 esac
-
-echo "This is a idle script (infinite loop) to keep container running."
-
-function cleanup(){
-  kill -s SIGTERM $!
-  exit 0
-}
-
-trap cleanup SIGINT SIGTERM
-
-while [ 1 ]
-do
-  sleep 60 & wait $!
-done
