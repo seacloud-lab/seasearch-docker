@@ -70,16 +70,16 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
     
     if [ "$HTTP_CODE" != "000" ] && [ "$HTTP_CODE" -lt 400 ]; then
         echo "Cluster register successfully (HTTP $HTTP_CODE)"
-        
-        # Restart seasearch-proxy for normal mode
-        if [ "${SS_GATEWAY_NODE_TYPE}" != "proxy" ] && [ "${SS_GATEWAY_NODE_TYPE}" != "manager" ]; then
+
+        # The gateway entrypoint starts and supervises the proxy during boot.
+        if [ "${SS_SKIP_PROXY_RESTART}" != "true" ] && [ "${SS_GATEWAY_NODE_TYPE}" != "proxy" ] && [ "${SS_GATEWAY_NODE_TYPE}" != "manager" ]; then
             echo "Restarting seasearch-proxy to apply new cluster config..."
             pkill -f "seasearch-proxy" || true
             sleep 1
             cd /opt/cluster && ./seasearch-proxy &
             echo "seasearch-proxy restarted successfully."
         fi
-        
+
         exit 0
     fi
     

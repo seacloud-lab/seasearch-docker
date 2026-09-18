@@ -19,4 +19,4 @@ RUN chmod +x /opt/scripts/entrypoint.sh
 RUN ln -s /opt/faiss/build/c_api/libfaiss_c.so /usr/lib/libfaiss_c.so
 RUN ln -s /opt/faiss/build/faiss/libfaiss.so /usr/lib/libfaiss.so
 RUN ln -s /usr/local/lib/libusearch_c.so /usr/lib/libusearch_c.so
-CMD ["bash", "-c", "/opt/scripts/entrypoint.sh"]
+CMD ["/opt/scripts/entrypoint.sh"]
