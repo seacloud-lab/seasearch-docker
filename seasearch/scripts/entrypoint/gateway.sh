@@ -1,6 +1,7 @@
 #!/bin/bash
+set -euo pipefail
 
-function set_env(){
+set_env() {
   export SS_CLUSTER_MANAGER_HOST=0.0.0.0
   export SS_CLUSTER_MANAGER_PORT=4081
   export SS_CLUSTER_MANAGER_URL=http://127.0.0.1:4081/
@@ -8,68 +9,73 @@ function set_env(){
   export SS_CLUSTER_PROXY_PORT=4082
 }
 
-function set_proxy_env(){
+set_proxy_env() {
   export SS_CLUSTER_PROXY_HOST=0.0.0.0
   export SS_CLUSTER_PROXY_PORT=4082
 }
 
-function set_manager_env(){
+set_manager_env() {
   export SS_CLUSTER_MANAGER_HOST=0.0.0.0
   export SS_CLUSTER_MANAGER_PORT=4081
 }
 
-cd /opt/cluster
+manager_pid=""
+proxy_pid=""
 
-case "${SS_GATEWAY_NODE_TYPE}" in
+cleanup() {
+  [ -n "$manager_pid" ] && kill -s SIGTERM "$manager_pid" 2>/dev/null || true
+  [ -n "$proxy_pid" ]   && kill -s SIGTERM "$proxy_pid"   2>/dev/null || true
+  [ -n "$manager_pid" ] && wait "$manager_pid" 2>/dev/null || true
+  [ -n "$proxy_pid" ]   && wait "$proxy_pid"   2>/dev/null || true
+}
+
+cd /opt/cluster || exit 1
+
+case "${SS_GATEWAY_NODE_TYPE:-}" in
   "proxy")
     echo "Starting in PROXY mode"
     set_proxy_env
-    chmod +x seasearch-proxy
     exec ./seasearch-proxy
     ;;
 
-  *)
-    if [ "${SS_GATEWAY_NODE_TYPE}" == "manager" ]; then
-        echo "Starting in MANAGER mode"
-        set_manager_env
+  "manager"|"")
+    if [ "${SS_GATEWAY_NODE_TYPE:-}" = "manager" ]; then
+      echo "Starting in MANAGER mode"
+      set_manager_env
     else
-        echo "Starting in NORMAL mode"
-        set_env
-        chmod +x seasearch-proxy
+      echo "Starting in NORMAL mode"
+      set_env
     fi
 
-    chmod +x cluster-manager
     ./cluster-manager &
     manager_pid=$!
 
-    cleanup() {
-        [ -z "${manager_pid}" ] || kill -s SIGTERM "${manager_pid}" 2>/dev/null || true
-        [ -z "${proxy_pid}" ] || kill -s SIGTERM "${proxy_pid}" 2>/dev/null || true
-        [ -z "${manager_pid}" ] || wait "${manager_pid}" 2>/dev/null || true
-        [ -z "${proxy_pid}" ] || wait "${proxy_pid}" 2>/dev/null || true
-    }
+    trap 'cleanup; exit 143' SIGINT SIGTERM
 
-    trap 'cleanup; exit 0' SIGINT SIGTERM
-
-    if [ -n "${SS_SERVER_CLUSTER_ENPOINTS}" ]; then
-        SS_SKIP_PROXY_RESTART=true /opt/scripts/register-cluster.sh "${SS_SERVER_CLUSTER_ENPOINTS}" || {
-            exit_code=$?
-            cleanup
-            exit "${exit_code}"
-        }
+    if [ -n "${SS_SERVER_CLUSTER_ENDPOINTS:-}" ]; then
+      if ! SS_SKIP_PROXY_RESTART=true /opt/scripts/register-cluster.sh "${SS_SERVER_CLUSTER_ENDPOINTS}"; then
+        rc=$?
+        cleanup
+        exit "$rc"
+      fi
     fi
 
-    if [ "${SS_GATEWAY_NODE_TYPE}" == "manager" ]; then
-        wait "${manager_pid}"
-        exit $?
+    if [ "${SS_GATEWAY_NODE_TYPE:-}" = "manager" ]; then
+      wait "$manager_pid"
+      exit $?
     fi
 
     ./seasearch-proxy &
     proxy_pid=$!
 
-    wait -n "${manager_pid}" "${proxy_pid}"
-    exit_code=$?
+    wait -n "$manager_pid" "$proxy_pid"
+    rc=$?
     cleanup
-    exit "${exit_code}"
+    exit "$rc"
+    ;;
+
+  *)
+    echo "Unknown SS_GATEWAY_NODE_TYPE: ${SS_GATEWAY_NODE_TYPE}" >&2
+    exit 1
     ;;
 esac
